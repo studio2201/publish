@@ -11,11 +11,12 @@ COPY publish /app/publish
 WORKDIR /app/publish
 
 RUN trunk build --release
+RUN cargo build --release
 
-FROM registry.access.redhat.com/ubi9/ubi:latest
-RUN dnf install -y nginx && dnf clean all
-COPY --from=builder /app/publish/dist /usr/share/nginx/html
-RUN sed -i 's/listen\[\[:space:\]\]\*80/listen 4405/g' /etc/nginx/nginx.conf || true
-RUN sed -i 's/listen       80;/listen 4405;/g' /etc/nginx/nginx.conf || true
+FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
+WORKDIR /app
+COPY --from=builder /app/publish/target/release/publish /app/server
+COPY --from=builder /app/publish/dist /app/dist
+ENV BIND_ADDR="0.0.0.0:4405"
 EXPOSE 4405
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/app/server"]
