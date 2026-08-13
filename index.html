@@ -3,7 +3,17 @@
 <head>
     <meta charset="utf-8" />
     <title>Publish</title>
+    <link rel="manifest" href="manifest.json" />
+    <link data-trunk rel="copy-file" href="manifest.json" />
+    <link data-trunk rel="copy-file" href="service-worker.js" />
 </head>
 <body>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js');
+            });
+        }
+    </script>
 </body>
 </html>
