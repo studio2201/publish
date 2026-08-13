@@ -1,3 +1,5 @@
+<img src="brand/icon_128x128.png" alt="publish icon" width="128" align="right" />
+
 # publish
 
 ## Container Variables
